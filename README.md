@@ -21,4 +21,37 @@ apt install terminator.
 
 2. Clone this repository to access some helpful scripts
 
+3. Run apt-install.sh
+This will install all dependency packages I found necessary
+
+4. Run clone-mate-from-git.sh
+This will clone the 1.22 version of Mate Desktop, plus Mate Tweak, Mate University and Brisk Menu
+
+5. Optional - review arch-build-args.txt
+This will show the ./configure args and dependencies that the kind maintainer uses for Arch
+(You could of course install Manjaro Linux and the Mate respositories, and not bother with my humble efforts)
+
+6. Optional - cd into a application's directorty and run build-mate-single.sh
+This is a script to edit for your own individual build requirements.
+I used it initially to work out what to do!
+
+7. Run build-base.sh
+Hopefully, this will run to completion and build all applications into /usr/local
+
+8. Create SymLink 
+ln -s /usr/local/share/xsessions/mate.desktop /usr/share/xsessions
+This will make Mate Desktop available to select from the Lightdm login page.
+
+9. Reboot, select MATE and it might work!
+
+10. Run update-clones.py
+This will update the clones if changes have been made
+This happens quite frequently!!
+I've not yet modified build-base.sh to detect any updates. You'll have to do it manually, or use clean argument, which will
+recompile all.
+
+//END
+
+
+
 
