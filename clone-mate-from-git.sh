@@ -67,6 +67,7 @@ if [ ! -d mate-backgrounds ]; then
 	git clone -b 1.22 https://github.com/mate-desktop/mate-backgrounds.git
 fi
 
+#Requires GTK2
 if [ ! -d mate-themes ]; then
 	git clone -b gtk3.22 https://github.com/mate-desktop/mate-themes.git
 fi
@@ -86,8 +87,6 @@ fi
 if [ ! -d mate-tweak ]; then
 	git clone -b 19.10.1 --depth 1 https://github.com/ubuntu-mate/mate-tweak.git
 fi
-
-
 
 if [ ! -d brisk-menu ]; then
 	#git clone https://github.com/solus-project/brisk-menu.git

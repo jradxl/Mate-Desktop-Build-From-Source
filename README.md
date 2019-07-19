@@ -14,10 +14,11 @@ This is work in progress...
 1. Install Xubuntu 19.04 into VirtualBox, and configure how you want.
 By using Xubuntu, I was sure that had a working Xorg and Lightdm.
 I add the GuestAdditions of course, and the Terminator terminal
-apt update
+    `apt update
 apt upgrade
 apt install build-essential
-apt install terminator.
+apt install terminator
+apt install git`
 
 2. Clone this repository to access some helpful scripts
 
@@ -39,7 +40,7 @@ I used it initially to work out what to do!
 Hopefully, this will run to completion and build all applications into /usr/local
 
 8. Create SymLink 
-ln -s /usr/local/share/xsessions/mate.desktop /usr/share/xsessions
+`ln -s /usr/local/share/xsessions/mate.desktop /usr/share/xsessions`
 This will make Mate Desktop available to select from the Lightdm login page.
 
 9. Reboot, select MATE and it might work!
@@ -49,6 +50,12 @@ This will update the clones if changes have been made
 This happens quite frequently!!
 I've not yet modified build-base.sh to detect any updates. You'll have to do it manually, or use clean argument, which will
 recompile all.
+
+
+NOTES
+a. pluma is available for use as soon as the install is completed.
+b. As soon as Brisk-Menu is built, you can test with /usr/local/bin/mate-panel-test-applets
+c. As soon as Mate University is built, you can test both applets with /usr/local/bin/mate-panel-test-applets
 
 //END
 

@@ -28,11 +28,12 @@ listofpackages=(
     mate-utils
     mate-terminal
     mate-backgrounds
+    ##mate-themes requires GTK2
     mate-themes
     mate-notification-daemon
-	mate-tweak
+    mate-tweak
     pluma
-	mate-university
+    mate-university
 )
 
 ##Not currently used
@@ -173,6 +174,16 @@ for i in $(seq 0 $((${#listofpackages[@]} - 1))); do
 			config_opts_extra="--enable-introspection"
 		else
 			config_opts_extra=""
+		fi
+
+		##TODO support the INSTALLDONE
+		##Currently will always build
+		if [[ "${name}" == "mate-tweak" ]]
+		then
+			echo "Mate-Tweak is a python build"
+            sudo ./setup.py install
+			cd ..
+			continue
 		fi
 
 		if [[ -f INSTALLDONE ]] && $uninstall ;
