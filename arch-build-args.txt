@@ -1,0 +1,159 @@
+
+REF
+https://wiki.archlinux.org/index.php/MATE
+
+REF - Mate Base Group
+https://www.archlinux.org/groups/x86_64/mate/
+
+
+x86_64 	Community 	caja 						1.22.1-1 	File manager for the MATE desktop 	2019-05-20 	
+x86_64 	Community 	marco 						1.22.1-1 	A window manager for MATE 	2019-05-20 	2019-06-16
+any 	Community 	mate-backgrounds 			1.22.0-1 	Background images and data for MATE 	2019-03-30 	
+x86_64 	Community 	mate-control-center 		1.22.1-1 	The Control Center for MATE 	2019-05-20 	
+x86_64 	Community 	mate-desktop 				1.22.1-1 	Library with common API for various MATE modules 	2019-05-20 	
+any 	Community 	mate-icon-theme 			1.22.1-1 	MATE icon theme 	2019-05-20 	
+x86_64 	Community 	mate-menus 					1.22.0-1 	MATE menu specifications 	2019-03-30 	
+x86_64 	Community 	mate-notification-daemon 	1.22.0-1 	Notification daemon for MATE 	2019-03-30 	
+x86_64 	Community 	mate-panel 					1.22.1-1 	The MATE Panel 	2019-05-20 	
+x86_64 	Community 	mate-polkit 				1.22.0-1 	PolicyKit integration for the MATE desktop 	2019-03-30 	
+x86_64 	Community 	mate-session-manager 		1.22.1-1 	The MATE Session Handler 	2019-05-07 	
+x86_64 	Community 	mate-settings-daemon 		1.22.0-1 	The MATE Settings daemon 	2019-03-30 	
+any 	Community 	mate-themes 				3.22.19-1 	Default themes for the MATE desktop 	2019-03-30 	2019-06-18
+any 	Community 	mate-user-guide
+
+
+mate-common
+	depends=('autoconf' 'automake' 'gettext' 'gtk-doc' 'intltool' 'libtool' 'pkg-config')
+	./configure --prefix=/usr
+
+mate-desktop
+	depends=('gtk3' 'startup-notification' 'iso-codes')
+	makedepends=('gobject-introspection' 'intltool')
+    	./configure --prefix=/usr --disable-schemas-compile
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+libmatekbd
+	depends=('gtk3' 'libxklavier') 
+	makedepends=('intltool' 'python')
+    	./configure --prefix=/usr 
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+libmateweather
+	depends=('gtk3' 'libsoup')
+	makedepends=('intltool')
+	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-python --enable-locations-compression
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+mate-icon-theme
+	makedepends=('icon-naming-utils' 'intltool')
+	./configure --prefix=/usr
+
+caja
+	depends=('exempi' 'gvfs' 'libexif' 'libsm' 'mate-desktop' 'libnotify')
+	makedepends=('gobject-introspection' 'intltool')
+	optdepends=('gstreamer: automatic media playback when mouseover')
+    	./configure --prefix=/usr --libexecdir=/usr/lib/$pkgname --enable-introspection --disable-update-mimedb
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+marco
+	depends=('libcanberra' 'libgtop' 'mate-desktop' 'zenity' 'libxpresent')
+	makedepends=('intltool' 'itstool')
+    	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-startup-notification
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+mate-polkit
+	depends=('gtk3' 'polkit')
+	makedepends=('accountsservice' 'gobject-introspection' 'intltool')
+    	./configure --prefix=/usr --libexecdir=/usr/lib/${pkgname} --sysconfdir=/etc --localstatedir=/var --enable-introspection
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+mate-settings-daemon
+	depends=('dbus-glib' 'libcanberra' 'libmatekbd' 'libmatemixer' 'libnotify' 'mate-desktop' 'nss' 'polkit')
+	makedepends=('intltool' 'python')
+	optdepends=('libcanberra-pulse: PulseAudio support' 'pulseaudio-alsa: PulseAudio support')
+    	./configure --prefix=/usr --libexecdir=/usr/lib/${pkgname} --sysconfdir=/etc --enable-polkit --enable-pulse
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+mate-session-manager
+	depends=('dbus-glib' 'gtk3' 'libsm' 'mate-desktop')
+	makedepends=('intltool' 'xtrans' 'systemd' 'python')
+	optdepends=('gnome-keyring: keyring support' 'xdg-user-dirs-gtk: manage user directories')
+    	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --disable-upower
+
+mate-menus
+	depends=('glib2')
+	makedepends=('gobject-introspection' 'intltool' 'python2')
+	optdepends=('python2: python2 bindings')
+    	PYTHON=/usr/bin/python2 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --enable-python
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+mate-panel
+	depends=('dbus-glib' 'libwnck3' 'libcanberra' 'libmateweather' 'libsm' 'mate-menus' 'mate-desktop')
+	makedepends=('intltool' 'itstool' 'gobject-introspection')
+    	./configure --prefix=/usr --libexecdir=/usr/lib/${pkgname} --sysconfdir=/etc --localstatedir=/var --enable-introspection
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+mate-control-center
+	depends=('mate-menus' 'mate-settings-daemon' 'marco' 'libxss' 'mate-desktop>=1.21.2')
+	makedepends=('intltool' 'itstool')
+    	./configure --prefix=/usr --sysconfdir=/etc --sbindir=/usr/bin --localstatedir=/var --disable-update-mimedb
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+mate-system-monitor
+	depends=('gtkmm3' 'libgtop' 'libwnck3')
+	makedepends=('intltool' 'itstool' 'python')
+    	./configure -prefix=/usr --libexecdir=/usr/lib/${pkgname} --localstatedir=/var --enable-systemd
+
+mate-utils
+	depends=('mate-desktop' 'libcanberra' 'libgtop' 'libsm')
+	makedepends=('inkscape' 'intltool' 'itstool' 'mate-panel' 'python')
+	optdepends=('mate-panel: Look up words in dictionaries from the panel')
+    	./configure --prefix=/usr --libexecdir=/usr/lib/${_pkgbase} --sysconfdir=/etc --disable-maintainer-flags
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+mate-terminal
+	depends=('libsm' 'mate-desktop' 'vte3')
+	makedepends=('intltool' 'itstool' 'python')
+   	./configure --prefix=/usr
+
+mate-backgrounds
+	makedepends=('intltool')
+    	./configure --prefix=/usr
+
+mate-themes
+	makedepends=('gtk2' 'intltool')
+	optdepends=('gtk-engines: for gtk2 themes' 'gtk-engine-murrine: for gtk2 themes' 'mate-icon-theme: default icon theme') 	
+	./configure --prefix=/usr
+
+mate-notification-daemon
+	depends=('libcanberra' 'libwnck3' 'libnotify')
+	makedepends=('intltool' 'python')
+    	./configure --prefix=/usr --libexecdir=/usr/lib/${pkgname}
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+pluma
+	depends=('iso-codes' 'mate-desktop' 'zenity' 'gtksourceview3' 'libpeas' 'python2')
+	makedepends=('intltool' 'itstool' 'gobject-introspection' 'python2' 'mate-common' 'yelp-tools')
+	optdepends=('python2-gobject: to use the python plugins')
+	sed -i 's/python/python2/' plugins/externaltools/data/switch-c.tool.in
+    	sed -i 's/, enchant/, enchant-2/' configure.ac
+    	PYTHON=/usr/bin/python2 ./configure --prefix=/usr --libexecdir=/usr/lib/${pkgname} --enable-gtk-doc=no --enable-python
+    	#https://bugzilla.gnome.org/show_bug.cgi?id=656231
+    	sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
+
+
+
+//END
+
